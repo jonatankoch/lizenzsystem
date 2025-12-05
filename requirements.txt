@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+jinja2
+python-multipart
+
+sqlalchemy
+alembic
+psycopg2-binary
+
+passlib
+itsdangerous

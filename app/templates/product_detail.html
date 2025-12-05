@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Produkt {{ product.name }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-3 d-flex justify-content-between align-items-center">
+  <span>{{ product.name }}</span>
+  <div>
+    <a href="/products/{{ product.id }}/edit" class="btn btn-outline-primary me-2">Bearbeiten</a>
+    <a href="/products/{{ product.id }}/delete" class="btn btn-outline-danger">Löschen</a>
+  </div>
+</h1>
+
+
+
+<div class="card mb-4">
+  <div class="card-body">
+    <p><strong>Kategorie:</strong> {{ product.category or "-" }}</p>
+    <p><strong>Hersteller:</strong> {{ product.manufacturer or "-" }}</p>
+    <p><strong>Notizen:</strong><br>{{ product.notes or "-" }}</p>
+  </div>
+</div>
+
+<h2 class="h4 mb-3">Lizenzen mit diesem Produkt</h2>
+
+{% if product.licenses %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Kunde</th>
+        <th>Lizenzschlüssel</th>
+        <th>Sitze</th>
+        <th>Start</th>
+        <th>Ende</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lic in product.licenses %}
+      <tr>
+        <td><a href="/customers/{{ lic.customer.id }}">{{ lic.customer.name }}</a></td>
+        <td><a href="/licenses/{{ lic.id }}">{{ lic.license_key or "-" }}</a></td>
+        <td>{{ lic.seats or "-" }}</td>
+        <td>{{ lic.start_date or "-" }}</td>
+        <td>{{ lic.end_date or "-" }}</td>
+        <td>{{ lic.status or "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <div class="alert alert-info">Für dieses Produkt existieren noch keine Lizenzen.</div>
+{% endif %}
+
+<a href="/products" class="btn btn-secondary mt-3">Zurück zur Produktübersicht</a>
+{% endblock %}

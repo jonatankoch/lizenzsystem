@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {% if user_obj %}Benutzer bearbeiten{% else %}Neuer Benutzer{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">
+  {% if user_obj %}Benutzer bearbeiten{% else %}Neuer Benutzer{% endif %}
+</h1>
+
+<form method="post"
+      action="{% if user_obj %}/admin/users/{{ user_obj.id }}/edit{% else %}/admin/users/new{% endif %}"
+      class="card p-4 shadow-sm" style="max-width: 500px;">
+
+  <div class="mb-3">
+    <label class="form-label">Benutzername</label>
+    <input type="text" name="username" class="form-control" required
+           value="{{ user_obj.username if user_obj else '' }}">
+  </div>
+
+  {% if not user_obj %}
+  <div class="mb-3">
+    <label class="form-label">Passwort</label>
+    <input type="password" name="password" class="form-control" required>
+  </div>
+  {% endif %}
+
+  <div class="mb-3">
+    <label class="form-label">Rolle</label>
+    <select name="role" class="form-select">
+      {% set role_val = user_obj.role if user_obj else "user" %}
+      <option value="user" {% if role_val == "user" %}selected{% endif %}>User</option>
+      <option value="admin" {% if role_val == "admin" %}selected{% endif %}>Admin</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Aktiv</label>
+    {% set active_val = user_obj.is_active if user_obj is not none else 1 %}
+    <select name="is_active" class="form-select">
+      <option value="1" {% if active_val == 1 %}selected{% endif %}>Ja</option>
+      <option value="0" {% if active_val == 0 %}selected{% endif %}>Nein</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">
+    {% if user_obj %}Speichern{% else %}Anlegen{% endif %}
+  </button>
+  <a href="/admin/users" class="btn btn-secondary ms-2">Abbrechen</a>
+</form>
+{% endblock %}

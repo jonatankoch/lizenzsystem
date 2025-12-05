@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:16
+    container_name: license-manager-db
+    environment:
+      POSTGRES_USER: licenses
+      POSTGRES_PASSWORD: licenses_pw
+      POSTGRES_DB: licenses_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  web:
+    build: .
+    container_name: license-manager-web
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql+psycopg2://licenses:licenses_pw@db:5432/licenses_db
+      SECRET_KEY: "irgendein-langer-zufaelliger-string"
+    ports:
+      - "8080:8000"
+    restart: unless-stopped
+
+volumes:
+  db_data:

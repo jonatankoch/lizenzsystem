@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Kunde löschen{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-danger">Kunde löschen</h1>
+
+<div class="alert alert-warning">
+  <p>Willst du den folgenden Kunden wirklich löschen?</p>
+  <ul>
+    <li><strong>{{ customer.customer_number }}</strong> – {{ customer.name }}</li>
+  </ul>
+
+  {% if customer.licenses %}
+    <p class="mt-2">
+      <strong>Achtung:</strong> Dieser Kunde hat {{ customer.licenses|length }} Lizenzen.
+      Diese werden <strong>mit gelöscht</strong>.
+    </p>
+  {% endif %}
+</div>
+
+<form method="post" action="/customers/{{ customer.id }}/delete">
+  <button type="submit" class="btn btn-danger">Ja, endgültig löschen</button>
+  <a href="/customers/{{ customer.id }}" class="btn btn-secondary ms-2">Abbrechen</a>
+</form>
+{% endblock %}

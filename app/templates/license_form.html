@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {% if license %}Lizenz bearbeiten{% else %}Neue Lizenz{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">
+  {% if license %}Lizenz bearbeiten{% else %}Neue Lizenz{% endif %}
+</h1>
+
+<form method="post"
+      action="{% if license %}/licenses/{{ license.id }}/edit{% else %}/licenses/new{% endif %}"
+      class="card p-4 shadow-sm">
+
+  <div class="mb-3">
+    <label class="form-label">Kunde</label>
+    <select name="customer_id" class="form-select" required>
+      <option value="">-- Bitte wählen --</option>
+      {% for c in customers %}
+        <option value="{{ c.id }}"
+          {% if license and license.customer_id == c.id %}selected{% endif %}>
+          {{ c.customer_number }} - {{ c.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Produkt</label>
+    <select name="product_id" class="form-select" required>
+      <option value="">-- Bitte wählen --</option>
+      {% for p in products %}
+        <option value="{{ p.id }}"
+          {% if license and license.product_id == p.id %}selected{% endif %}>
+          {{ p.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Lizenzschlüssel / Tenant-ID</label>
+    <input type="text" name="license_key" class="form-control"
+           value="{{ license.license_key if license and license.license_key else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Seats / Geräte</label>
+    <input type="number" name="seats" class="form-control" min="1"
+           value="{{ license.seats if license and license.seats else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Startdatum</label>
+    <input type="date" name="start_date" class="form-control"
+           value="{{ license.start_date if license and license.start_date else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Enddatum / nächste Verlängerung</label>
+    <input type="date" name="end_date" class="form-control"
+           value="{{ license.end_date if license and license.end_date else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Intervall</label>
+    <select name="interval" class="form-select">
+      {% set interval_val = license.interval if license and license.interval else '' %}
+      <option value="" {% if not interval_val %}selected{% endif %}>-</option>
+      <option value="monthly" {% if interval_val == "monthly" %}selected{% endif %}>Monatlich</option>
+      <option value="yearly" {% if interval_val == "yearly" %}selected{% endif %}>Jährlich</option>
+      <option value="once" {% if interval_val == "once" %}selected{% endif %}>Einmalig</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Preis (frei, z.B. "150€/Jahr")</label>
+    <input type="text" name="price" class="form-control"
+           value="{{ license.price if license and license.price else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Status</label>
+    <select name="status" class="form-select">
+      {% set status_val = license.status if license and license.status else "active" %}
+      <option value="active" {% if status_val == "active" %}selected{% endif %}>Aktiv</option>
+      <option value="expired" {% if status_val == "expired" %}selected{% endif %}>Abgelaufen</option>
+      <option value="cancelled" {% if status_val == "cancelled" %}selected{% endif %}>Gekündigt</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Notizen</label>
+    <textarea name="notes" class="form-control" rows="3">{% if license and license.notes %}{{ license.notes }}{% endif %}</textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary">
+    {% if license %}Speichern{% else %}Anlegen{% endif %}
+  </button>
+  <a href="/licenses" class="btn btn-secondary ms-2">Abbrechen</a>
+</form>
+{% endblock %}

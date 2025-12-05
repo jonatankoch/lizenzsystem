@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Lizenz {{ license.license_key or license.id }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-3 d-flex justify-content-between align-items-center">
+  <span>Lizenzdetails</span>
+  <div>
+    <a href="/licenses/{{ license.id }}/edit" class="btn btn-outline-primary me-2">Bearbeiten</a>
+    <a href="/licenses/{{ license.id }}/delete" class="btn btn-outline-danger">Löschen</a>
+  </div>
+</h1>
+
+
+
+<div class="card mb-4">
+  <div class="card-body">
+    <p><strong>Kunde:</strong>
+      <a href="/customers/{{ license.customer.id }}">{{ license.customer.name }}</a>
+    </p>
+    <p><strong>Produkt:</strong>
+      <a href="/products/{{ license.product.id }}">{{ license.product.name }}</a>
+    </p>
+    <p><strong>Lizenzschlüssel / Tenant-ID:</strong> {{ license.license_key or "-" }}</p>
+    <p><strong>Sitze:</strong> {{ license.seats or "-" }}</p>
+
+    <p><strong>Startdatum:</strong> {{ license.start_date or "-" }}</p>
+    <p><strong>Enddatum / nächste Verlängerung:</strong> {{ license.end_date or "-" }}</p>
+    <p><strong>Intervall:</strong> {{ license.interval or "-" }}</p>
+    <p><strong>Preis:</strong> {{ license.price or "-" }}</p>
+    <p><strong>Status:</strong> {{ license.status or "-" }}</p>
+
+    <p><strong>Notizen:</strong><br>{{ license.notes or "-" }}</p>
+  </div>
+</div>
+
+<a href="/licenses" class="btn btn-secondary">Zurück zur Lizenzübersicht</a>
+{% endblock %}

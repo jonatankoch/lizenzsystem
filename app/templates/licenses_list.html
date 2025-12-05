@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Lizenzen{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="mb-0">Lizenzen</h1>
+  <a href="/licenses/new" class="btn btn-primary">Neue Lizenz</a>
+</div>
+
+<form method="get" action="/licenses" class="card p-3 mb-3">
+  <div class="row g-2 align-items-end">
+    <!-- Textsuche -->
+    <div class="col-md-3">
+      <label class="form-label">Suche</label>
+      <input type="text"
+             name="q"
+             class="form-control"
+             placeholder="Lizenzschlüssel, Kunde, Produkt..."
+             value="{{ q or '' }}">
+    </div>
+
+    <!-- Kunde -->
+    <div class="col-md-3">
+      <label class="form-label">Kunde</label>
+      <select name="customer_id" class="form-select">
+        <option value="">Alle</option>
+        {% for c in customers %}
+          <option value="{{ c.id }}" {% if customer_id and customer_id|int == c.id %}selected{% endif %}>
+            {{ c.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Produkt -->
+    <div class="col-md-3">
+      <label class="form-label">Produkt</label>
+      <select name="product_id" class="form-select">
+        <option value="">Alle</option>
+        {% for p in products %}
+          <option value="{{ p.id }}" {% if product_id and product_id|int == p.id %}selected{% endif %}>
+            {{ p.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Status -->
+    <div class="col-md-3">
+      <label class="form-label">Status</label>
+      {% set status_val = status or "all" %}
+      <select name="status" class="form-select">
+        <option value="all" {% if status_val == "all" %}selected{% endif %}>Alle</option>
+        <option value="active" {% if status_val == "active" %}selected{% endif %}>Aktiv</option>
+        <option value="expired" {% if status_val == "expired" %}selected{% endif %}>Abgelaufen</option>
+        <option value="cancelled" {% if status_val == "cancelled" %}selected{% endif %}>Gekündigt</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row g-2 mt-2 align-items-end">
+    <!-- Ablauf-Filter -->
+    <div class="col-md-3">
+      <label class="form-label">Ablauf</label>
+      <select name="expiring" class="form-select">
+        <option value="">Alle</option>
+        <option value="30" {% if expiring == "30" %}selected{% endif %}>läuft in 30 Tagen ab</option>
+        <option value="60" {% if expiring == "60" %}selected{% endif %}>läuft in 60 Tagen ab</option>
+        <option value="90" {% if expiring == "90" %}selected{% endif %}>läuft in 90 Tagen ab</option>
+        <option value="expired" {% if expiring == "expired" %}selected{% endif %}>bereits abgelaufen</option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-outline-secondary w-100">Filtern</button>
+    </div>
+
+    <div class="col-md-2">
+      <a href="/licenses" class="btn btn-outline-light border w-100">Zurücksetzen</a>
+    </div>
+  </div>
+</form>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Kunde</th>
+      <th>Produkt</th>
+      <th>Lizenzschlüssel</th>
+      <th>Sitze</th>
+      <th>Startdatum</th>
+      <th>Enddatum</th>
+      <th>Status</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for lic in licenses %}
+    <tr>
+      <td>{{ lic.customer.name if lic.customer else "" }}</td>
+      <td>{{ lic.product.name if lic.product else "" }}</td>
+      <td>{{ lic.license_key or "" }}</td>
+      <td>{{ lic.seats or "" }}</td>
+      <td>{{ lic.start_date or "" }}</td>
+      <td>{{ lic.end_date or "" }}</td>
+      <td>{{ lic.status or "" }}</td>
+      <td class="text-end">
+        <a href="/licenses/{{ lic.id }}" class="btn btn-sm btn-outline-primary">Details</a>
+      </td>
+    </tr>
+    {% endfor %}
+    {% if not licenses %}
+    <tr>
+      <td colspan="8" class="text-center text-muted">
+        Keine Lizenzen gefunden.
+      </td>
+    </tr>
+    {% endif %}
+  </tbody>
+</table>
+{% endblock %}

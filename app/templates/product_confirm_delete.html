@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Produkt löschen{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-danger">Produkt löschen</h1>
+
+<div class="alert alert-warning">
+  <p>Willst du das folgende Produkt wirklich löschen?</p>
+  <ul>
+    <li><strong>{{ product.name }}</strong> ({{ product.category or "-" }}, {{ product.manufacturer or "-" }})</li>
+  </ul>
+
+  {% if product.licenses %}
+    <p class="mt-2">
+      <strong>Achtung:</strong> Für dieses Produkt existieren {{ product.licenses|length }} Lizenzen.
+      Diese werden <strong>mit gelöscht</strong>.
+    </p>
+  {% endif %}
+</div>
+
+<form method="post" action="/products/{{ product.id }}/delete">
+  <button type="submit" class="btn btn-danger">Ja, endgültig löschen</button>
+  <a href="/products/{{ product.id }}" class="btn btn-secondary ms-2">Abbrechen</a>
+</form>
+{% endblock %}

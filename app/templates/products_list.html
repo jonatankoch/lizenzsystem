@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Produkte{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 d-flex justify-content-between align-items-center">
+  <span>Produkte</span>
+  <a href="/products/new" class="btn btn-primary">Neues Produkt</a>
+</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Kategorie</th>
+      <th>Hersteller</th>
+      <th>Lizenzen</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in products %}
+    <tr>
+      <td><a href="/products/{{ p.id }}">{{ p.name }}</a></td>
+      <td>{{ p.category or "-" }}</td>
+      <td>{{ p.manufacturer or "-" }}</td>
+      <td>{{ p.licenses|length }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {% if product %}Produkt bearbeiten{% else %}Neues Produkt{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">
+  {% if product %}Produkt bearbeiten{% else %}Neues Produkt{% endif %}
+</h1>
+
+<form method="post"
+      action="{% if product %}/products/{{ product.id }}/edit{% else %}/products/new{% endif %}"
+      class="card p-4 shadow-sm">
+
+  <div class="mb-3">
+    <label class="form-label">Name</label>
+    <input type="text" name="name" class="form-control" required
+           value="{{ product.name if product else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Kategorie</label>
+    <input type="text" name="category" class="form-control"
+           value="{{ product.category if product and product.category else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Hersteller</label>
+    <input type="text" name="manufacturer" class="form-control"
+           value="{{ product.manufacturer if product and product.manufacturer else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Notizen</label>
+    <textarea name="notes" class="form-control" rows="3">{% if product and product.notes %}{{ product.notes }}{% endif %}</textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary">
+    {% if product %}Speichern{% else %}Anlegen{% endif %}
+  </button>
+  <a href="/products" class="btn btn-secondary ms-2">Abbrechen</a>
+</form>
+{% endblock %}

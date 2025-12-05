@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Benutzerverwaltung{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 d-flex justify-content-between align-items-center">
+  <span>Benutzerverwaltung</span>
+  <a href="/admin/users/new" class="btn btn-primary">Neuer Benutzer</a>
+</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Benutzername</th>
+      <th>Rolle</th>
+      <th>Aktiv</th>
+      <th>Aktionen</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr>
+      <td>{{ u.username }}</td>
+      <td>{{ u.role }}</td>
+      <td>{{ "Ja" if u.is_active == 1 else "Nein" }}</td>
+      <td>
+        <a href="/admin/users/{{ u.id }}/edit" class="btn btn-sm btn-outline-primary me-2">Bearbeiten</a>
+        <a href="/admin/users/{{ u.id }}/reset-password" class="btn btn-sm btn-outline-secondary">Passwort ändern</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

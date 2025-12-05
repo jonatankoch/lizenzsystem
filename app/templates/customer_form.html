@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {% if customer %}Kunde bearbeiten{% else %}Neuer Kunde{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">
+  {% if customer %}Kunde bearbeiten{% else %}Neuer Kunde{% endif %}
+</h1>
+
+<form method="post"
+      action="{% if customer %}/customers/{{ customer.id }}/edit{% else %}/customers/new{% endif %}"
+      class="card p-4 shadow-sm">
+
+  <div class="mb-3">
+    <label class="form-label">Kundennummer</label>
+    <input type="text" name="customer_number" class="form-control" required
+           value="{{ customer.customer_number if customer else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Name</label>
+    <input type="text" name="name" class="form-control" required
+           value="{{ customer.name if customer else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Ansprechpartner</label>
+    <input type="text" name="contact_name" class="form-control"
+           value="{{ customer.contact_name if customer and customer.contact_name else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">E-Mail</label>
+    <input type="email" name="contact_email" class="form-control"
+           value="{{ customer.contact_email if customer and customer.contact_email else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Telefon</label>
+    <input type="text" name="contact_phone" class="form-control"
+           value="{{ customer.contact_phone if customer and customer.contact_phone else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Notizen</label>
+    <textarea name="notes" class="form-control" rows="3">{% if customer and customer.notes %}{{ customer.notes }}{% endif %}</textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary">
+    {% if customer %}Speichern{% else %}Anlegen{% endif %}
+  </button>
+  <a href="/customers" class="btn btn-secondary ms-2">Abbrechen</a>
+</form>
+{% endblock %}
